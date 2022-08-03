@@ -1,0 +1,425 @@
+openapi: 3.0.1
+info: 
+  version: 0.0.3
+  title: API Employees
+  description: "Vertigo API Employees"
+  contact:
+    name: Suporte
+    email: contato@vertigo.com.br
+    url: https://vertigo.com.br
+
+servers:
+  - url: http://localhost:8080 
+
+tags:
+  - name: "Employees"
+    description: "Especificações sobre os Employees"
+  - name: "Employee Summary"
+    description: "Dados resumidos de um Employee"
+  - name: "Super Hero"
+    description: "Dados consumidos da API Super Hero"
+  - name: "Consulta Cep"
+    description: "Dados consumidos do microserviço SOAP dos Correios"
+    
+
+paths:
+  /employee:
+    get:
+      tags:
+          - 
+            "Employees"
+      summary: "Busca todos os Employees"
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employees'
+
+        "500":
+          description: "Erro interno no servidor"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+    post: 
+      tags:
+        - 
+          "Employees"
+      summary: "Cadastra um novo Employee"
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/EmployeeCadastravel'
+
+      responses:
+        "201":
+          description: "Cliente cadastrado com sucesso"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Employee'
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+
+        "500":
+          description: "Erro interno no servidor"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+  /employee/{employee_id}:
+    parameters:
+      - name: employee_id 
+        in: path
+        schema:
+          type: integer
+          maximum: 99999
+          example: 123
+        required: true
+
+    get: 
+      tags: 
+        - "Employees"
+      summary: "Busca um Employee por id"
+      responses:
+        "200": 
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'  
+
+        "404":
+          description: "Employee não encontrado"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+        "500":
+          description: "Erro interno no servidor"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+    delete:
+      tags: 
+        - "Employees"
+      summary: "Deleta um Employee pelo id"
+      responses:
+        "204":
+          description: ""
+
+        "404":
+          description: "Employee não encontrado"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+        "500":
+          description: "Erro interno no servidor"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+    patch:
+      tags: 
+        - "Employees"
+      summary: "Atualiza um Employee pelo id"
+      requestBody: 
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/ObjectEmployee'
+      responses:
+        "200": 
+          description: "Ok"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Employee'
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+
+        "404":
+          description: "Employee não encontrado"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+        "500":
+          description: "Erro interno no servidor"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+  /employee/{employee_id}/summary:
+    parameters:
+      - name: employee_id 
+        in: path
+        schema:
+          type: integer
+          maximum: 99999
+          example: 123
+        required: true
+    
+    get: 
+      tags: 
+        - "Employee Summary"
+      summary: "Busca um Employee resumido por id"
+      responses:
+        "200": 
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeSummary'  
+
+        "404":
+          description: "Employee não encontrado"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+
+        "500":
+          description: "Erro interno no servidor"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+        
+  /heros:
+    get:
+      tags:
+          - 
+            "Super Hero"
+      summary: "Busca todos os Heros da API externa"
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuperHeros'
+
+        "500":
+          description: "Erro interno no servidor"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ErrorModel'
+  
+  /consultacep/{cep}:
+    parameters:
+      - name: cep 
+        in: path
+        schema:
+          type: string
+          minLength: 8 
+          maxLength: 9 
+        required: true
+        
+    get: 
+      tags: 
+        - "Consulta Cep"
+      summary: "Busca um cep no ms SOAP dos correios"
+      responses:
+        "200": 
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cep'
+     
+components:
+  schemas:
+    Employee: 
+      $ref: '#/components/schemas/ObjectEmployee'
+
+    Employees:
+      type: array
+      items:
+        $ref: '#/components/schemas/Employee'
+
+    EmployeeCadastravel:
+      type: object
+      required:
+        - "firstName"
+        - "lastName"
+        - "department"
+        - "jobTitle"
+        - "employeeType"
+        - "startDate"
+        - "status"
+        - "email"
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Andre"
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Almeida"
+        department:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Delivery"
+        jobTitle:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Estagiario"
+        employeeType:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Estg"
+        startDate:
+          type: string
+          format: date  
+          example: "2022-02-02"   
+        status:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Ativo"
+        email:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "email@email.com.br"
+
+    ObjectEmployee:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Andre"
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Almeida"
+        department:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Delivery"
+        jobTitle:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Estagiario"
+        employeeType:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Estg"
+        startDate:
+          type: string
+          format: date  
+          example: "2022-02-02"   
+        status:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Ativo"
+        email:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "email@email.com.br"
+
+    EmployeeSummary:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Andre"
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Almeida"
+
+    ErrorModel:
+      type: object
+      properties:
+        timestamp: 
+          type: string
+          example: "2022-06-10 12:35:56"
+        status:
+          type: string
+          example: "status error message"        
+        message:
+          type: string
+          example: "error message"
+        from: 
+          type: string
+          example: "employee-api"
+          
+    SuperHeros:
+      type: object
+      properties:
+        nomeVerdadeiro:
+          type: string
+          minLength: 1
+          maxLength: 45
+          example: "Superman"
+        caracteristica:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "Lorem Ipsum is simply dummy text of the printing"
+          
+    Cep:
+      type: object
+      properties:
+        bairro: 
+          type: string
+          example: "Bairro"
+        cep: 
+          type: string
+          example: "11111-111"
+        cidade: 
+          type: string
+          example: "Cidade"
+        complemento: 
+          type: string
+          example: "Complemento"
+        endereco: 
+          type: string
+          example: "Endereco"
+        uf: 
+          type: string
+          example: "UF"

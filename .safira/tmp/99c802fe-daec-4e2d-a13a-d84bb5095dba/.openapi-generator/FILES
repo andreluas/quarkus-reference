@@ -1,0 +1,17 @@
+.dockerignore
+.openapi-generator-ignore
+README.md
+pom.xml
+src/gen/java/br/com/vertigo/employee/api/ConsultacepApi.java
+src/gen/java/br/com/vertigo/employee/api/EmployeeApi.java
+src/gen/java/br/com/vertigo/employee/api/HerosApi.java
+src/gen/java/br/com/vertigo/employee/dto/Cep.java
+src/gen/java/br/com/vertigo/employee/dto/EmployeeCadastravel.java
+src/gen/java/br/com/vertigo/employee/dto/EmployeeSummary.java
+src/gen/java/br/com/vertigo/employee/dto/ErrorModel.java
+src/gen/java/br/com/vertigo/employee/dto/ObjectEmployee.java
+src/gen/java/br/com/vertigo/employee/dto/SuperHeros.java
+src/main/docker/Dockerfile.jvm
+src/main/docker/Dockerfile.native
+src/main/openapi/openapi.yaml
+src/main/resources/application.properties
